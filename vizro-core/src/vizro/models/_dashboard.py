@@ -7,7 +7,17 @@ from typing import TYPE_CHECKING, List, Literal, Optional, TypedDict, cast
 import dash
 import dash_bootstrap_components as dbc
 import dash_daq as daq
-from dash import ClientsideFunction, Input, Output, clientside_callback, get_asset_url, get_relative_path, html
+from dash import (
+    ClientsideFunction,
+    Input,
+    Output,
+    State,
+    callback,
+    clientside_callback,
+    get_asset_url,
+    get_relative_path,
+    html,
+)
 
 try:
     from pydantic.v1 import Field, validator
@@ -88,6 +98,7 @@ class Dashboard(VizroBaseModel):
 
     @_log_call
     def build(self):
+        self.collapsible_nav_callback()
         for page in self.pages:
             page.build()  # TODO: ideally remove, but necessary to register slider callbacks
 
@@ -185,9 +196,24 @@ class Dashboard(VizroBaseModel):
 
     def _make_page_layout(self, page: Page):
         page_divs = self._get_page_divs(page=page)
+        collapsable_icon_div = html.Div(
+            children=[html.Span("chevron_right", className="material-symbols-outlined", id="collapse_icon")],
+            className="collapsable-div",
+        )
         left_side = self._arrange_left_side(page_divs=page_divs)
+        collapsable_left_side = dbc.Collapse(
+            children=[left_side],
+            id="collapse",
+            is_open=True,
+            dimension="width",
+            navbar=True,
+        )
         right_side = self._arrange_right_side(page_divs=page_divs)
-        return html.Div([left_side, right_side], className="page_container", id="page_container_outer")
+        return html.Div(
+            [collapsable_left_side, collapsable_icon_div, right_side],
+            className="page_container",
+            id="page_container_outer",
+        )
 
     @staticmethod
     def _make_page_404_layout():
@@ -210,3 +236,18 @@ class Dashboard(VizroBaseModel):
             ],
             className="page_error_container",
         )
+
+    @staticmethod
+    def collapsible_nav_callback():
+        """Callback for collapsing navigation panel."""
+
+        @callback(
+            Output("collapse", "is_open", allow_duplicate=True),
+            Input("collapse_icon", "n_clicks"),
+            State("collapse", "is_open"),
+            prevent_initial_call="initial_duplicate",
+        )
+        def toggle_collapse(n_clicks, is_open):
+            if n_clicks:
+                return not is_open
+            return is_open
