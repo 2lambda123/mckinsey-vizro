@@ -12,7 +12,6 @@ from dash import (
     Input,
     Output,
     State,
-    callback,
     clientside_callback,
     get_asset_url,
     get_relative_path,
@@ -98,7 +97,6 @@ class Dashboard(VizroBaseModel):
 
     @_log_call
     def build(self):
-        self.collapsible_nav_callback()
         for page in self.pages:
             page.build()  # TODO: ideally remove, but necessary to register slider callbacks
 
@@ -106,6 +104,12 @@ class Dashboard(VizroBaseModel):
             ClientsideFunction(namespace="clientside", function_name="update_dashboard_theme"),
             Output("dashboard_container_outer", "className"),
             Input("theme_selector", "on"),
+        )
+        clientside_callback(
+            ClientsideFunction(namespace="clientside", function_name="collapse_nav_panel"),
+            Output("collapse", "is_open"),
+            Input("collapse_icon", "n_clicks"),
+            State("collapse", "is_open"),
         )
 
         return dbc.Container(
@@ -236,18 +240,3 @@ class Dashboard(VizroBaseModel):
             ],
             className="page_error_container",
         )
-
-    @staticmethod
-    def collapsible_nav_callback():
-        """Callback for collapsing navigation panel."""
-
-        @callback(
-            Output("collapse", "is_open", allow_duplicate=True),
-            Input("collapse_icon", "n_clicks"),
-            State("collapse", "is_open"),
-            prevent_initial_call="initial_duplicate",
-        )
-        def toggle_collapse(n_clicks, is_open):
-            if n_clicks:
-                return not is_open
-            return is_open
