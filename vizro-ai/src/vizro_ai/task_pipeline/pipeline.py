@@ -3,7 +3,10 @@ import inspect
 
 
 class Pipeline:
+    """Task Pipeline."""
+
     def __init__(self, llm):
+        """Initialization of pipeline class."""
         self.llm = llm
         self.stages = []
         self.components_instances = {}
