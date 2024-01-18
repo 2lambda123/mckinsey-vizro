@@ -27,19 +27,20 @@ class Pipeline:
     def run(self):
         """Run task pipeline."""
         current_args = None
+        output = None
         for stage, initial_args, output_key, is_group in self.stages:
             if current_args is None and initial_args is not None:
                 current_args = initial_args
 
             if is_group:
-                for component_class in stage:
+                for component_class, component_output_key in stage:
                     component = self._lazy_get_component(component_class)
-                    current_args = self._run_component(component, current_args)
+                    output = self._run_component(component, current_args, component_output_key)
             else:
                 component = self._lazy_get_component(stage)
-                current_args = self._run_component(component, current_args)
+                output = self._run_component(component, current_args, output_key)
 
-        return current_args
+        return output
 
     @staticmethod
     def _run_component(component, args, output_key=None):
@@ -51,7 +52,6 @@ class Pipeline:
         output = component.run(**component_args)
         if output_key:
             args[output_key] = output
-        else:
-            if isinstance(output, dict):
-                args.update(output or {})
-        return args
+        elif isinstance(output, dict):
+            args.update(output or {})
+        return output

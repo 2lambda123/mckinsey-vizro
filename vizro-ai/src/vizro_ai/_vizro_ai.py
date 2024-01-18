@@ -73,11 +73,20 @@ class VizroAI:
         # custom_chart_code = self._lazy_get_component(GetCustomChart).run(chain_input=visual_code)
 
         plot_pipeline = Pipeline(self.llm_to_use)
-        plot_pipeline.add(GetChartSelection, initial_args={"df": df, "chain_input": user_input},)  # Individual component
+        plot_pipeline.add(
+            GetChartSelection, initial_args={"df": df, "chain_input": user_input}, output_key="chart_types"
+        )
 
-
+        # Group of components
+        group_of_components = [
+            (GetDataFrameCraft, "df_code"),
+            (GetVisualCode, "visual_code"),
+            (GetCustomChart, "custom_chart_code"),
+        ]
+        plot_pipeline.add(group_of_components, is_group=True)
         custom_chart_code = plot_pipeline.run()
 
+        # TODO plug in pipeline after debugging logic in component
         fix_func = self._lazy_get_component(GetDebugger).run
         validated_code_dict = _debug_helper(
             code_string=custom_chart_code, max_debug_retry=max_debug_retry, fix_chain=fix_func, df=df
