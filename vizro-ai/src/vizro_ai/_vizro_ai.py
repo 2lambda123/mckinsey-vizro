@@ -14,8 +14,8 @@ from vizro_ai.components import (
     GetDebugger,
     GetVisualCode,
 )
-from vizro_ai.utils import _safeguard_check
 from vizro_ai.task_pipeline import Pipeline
+from vizro_ai.utils import _safeguard_check
 
 logger = logging.getLogger(__name__)
 
@@ -73,11 +73,9 @@ class VizroAI:
         # custom_chart_code = self._lazy_get_component(GetCustomChart).run(chain_input=visual_code)
 
         plot_pipeline = Pipeline(self.llm_to_use)
-        plot_pipeline.add(GetChartSelection, initial_args={'df': df, 'chain_input': user_input})  # Individual component
+        plot_pipeline.add(GetChartSelection, initial_args={"df": df, "chain_input": user_input},)  # Individual component
 
-        # Group of components
-        group_of_components = [GetDataFrameCraft, GetVisualCode, GetCustomChart]
-        plot_pipeline.add(group_of_components, is_group=True)
+
         custom_chart_code = plot_pipeline.run()
 
         fix_func = self._lazy_get_component(GetDebugger).run

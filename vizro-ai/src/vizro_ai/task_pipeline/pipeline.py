@@ -1,3 +1,7 @@
+"""Task pipeline."""
+import inspect
+
+
 class Pipeline:
     def __init__(self, llm):
         self.llm = llm
@@ -9,12 +13,21 @@ class Pipeline:
             self.components_instances[component_class] = component_class(llm=self.llm)
         return self.components_instances[component_class]
 
-    def add(self, stage, initial_args=None, is_group=False):
-        self.stages.append((stage, initial_args, is_group))
+    def add(self, stage, initial_args=None, output_key=None, is_group=False):
+        """Add task pipeline."""
+        self.stages.append(
+            (
+                stage,
+                initial_args,
+                output_key,
+                is_group,
+            )
+        )
 
     def run(self):
+        """Run task pipeline."""
         current_args = None
-        for stage, initial_args, is_group in self.stages:
+        for stage, initial_args, output_key, is_group in self.stages:
             if current_args is None and initial_args is not None:
                 current_args = initial_args
 
@@ -28,11 +41,17 @@ class Pipeline:
 
         return current_args
 
-    def _run_component(self, component, args):
-        import inspect
+    @staticmethod
+    def _run_component(component, args, output_key=None):
         sig = inspect.signature(component.run)
         param_names = sig.parameters.keys()
 
         # Filter args to only include those that the run method accepts
         component_args = {k: v for k, v in args.items() if k in param_names}
-        return component.run(**component_args)
+        output = component.run(**component_args)
+        if output_key:
+            args[output_key] = output
+        else:
+            if isinstance(output, dict):
+                args.update(output or {})
+        return args
