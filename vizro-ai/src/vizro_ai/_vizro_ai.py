@@ -15,6 +15,7 @@ from vizro_ai.components import (
     GetVisualCode,
 )
 from vizro_ai.utils import _safeguard_check
+from vizro_ai.task_pipeline import Pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -64,12 +65,20 @@ class VizroAI:
         self, df: pd.DataFrame, user_input: str, max_debug_retry: int = 3, explain: bool = False
     ) -> Dict[str, Any]:
         """Task execution."""
-        target_chart = self._lazy_get_component(GetChartSelection).run(df=df, chain_input=user_input)
-        df_code = self._lazy_get_component(GetDataFrameCraft).run(df=df, chain_input=user_input)
-        visual_code = self._lazy_get_component(GetVisualCode).run(
-            chain_input=user_input, chart_types=target_chart, df_code=df_code
-        )
-        custom_chart_code = self._lazy_get_component(GetCustomChart).run(chain_input=visual_code)
+        # target_chart = self._lazy_get_component(GetChartSelection).run(df=df, chain_input=user_input)
+        # df_code = self._lazy_get_component(GetDataFrameCraft).run(df=df, chain_input=user_input)
+        # visual_code = self._lazy_get_component(GetVisualCode).run(
+        #     chain_input=user_input, chart_types=target_chart, df_code=df_code
+        # )
+        # custom_chart_code = self._lazy_get_component(GetCustomChart).run(chain_input=visual_code)
+
+        plot_pipeline = Pipeline(self.llm_to_use)
+        plot_pipeline.add(GetChartSelection, initial_args={'df': df, 'chain_input': user_input})  # Individual component
+
+        # Group of components
+        group_of_components = [GetDataFrameCraft, GetVisualCode, GetCustomChart]
+        plot_pipeline.add(group_of_components, is_group=True)
+        custom_chart_code = plot_pipeline.run()
 
         fix_func = self._lazy_get_component(GetDebugger).run
         validated_code_dict = _debug_helper(
