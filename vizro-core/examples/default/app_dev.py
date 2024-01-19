@@ -28,11 +28,13 @@ page = vm.Page(
     components=[
         vm.Graph(
             id="scatter_chart",
-            figure=px.scatter(df, x="sepal_length", y="petal_width", color="species", custom_data=["species"]),
+            figure=px.scatter(df, x="sepal_length", y="petal_width",
+                              color="species", custom_data=["species"]),
         ),
         vm.Graph(
             id="scatter_chart_2",
-            figure=px.scatter(df, x="sepal_length", y="petal_width", color="species"),
+            figure=px.scatter(df, x="sepal_length",
+                              y="petal_width", color="species"),
         ),
         vm.Card(id="my_card", text="Click on a point on the above graph."),
     ],
