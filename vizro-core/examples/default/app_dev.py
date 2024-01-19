@@ -9,12 +9,22 @@ from vizro.models.types import MultiValueType, capture
 
 
 def _filter_isin(series: pd.Series, value: MultiValueType) -> pd.Series:
+    """
+
+    :param series: pd.Series: 
+    :param value: MultiValueType: 
+
+    """
     return series.isin(value)
 
 
 @capture("action")
 def my_custom_action(dropdown_value):
-    """Custom action."""
+    """Custom action.
+
+    :param dropdown_value: 
+
+    """
     print(dropdown_value)
     text = f"The dropdown species is: {dropdown_value}"
     return text
