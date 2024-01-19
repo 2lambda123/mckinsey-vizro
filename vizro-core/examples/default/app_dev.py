@@ -5,7 +5,8 @@ from vizro import Vizro
 from vizro._constants import FILTER_ACTION_PREFIX
 from vizro.actions import _filter
 from vizro.models import Action
-from vizro.models.types import MultiValueType, capture
+from vizro.models.types import capture
+from vizro.models.types import MultiValueType
 
 
 def _filter_isin(series: pd.Series, value: MultiValueType) -> pd.Series:
