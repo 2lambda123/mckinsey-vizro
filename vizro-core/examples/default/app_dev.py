@@ -12,8 +12,8 @@ from vizro.models.types import MultiValueType
 def _filter_isin(series: pd.Series, value: MultiValueType) -> pd.Series:
     """
 
-    :param series: pd.Series: 
-    :param value: MultiValueType: 
+    :param series: pd.Series:
+    :param value: MultiValueType:
 
     """
     return series.isin(value)
@@ -23,7 +23,7 @@ def _filter_isin(series: pd.Series, value: MultiValueType) -> pd.Series:
 def my_custom_action(dropdown_value):
     """Custom action.
 
-    :param dropdown_value: 
+    :param dropdown_value:
 
     """
     print(dropdown_value)
