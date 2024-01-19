@@ -1,21 +1,31 @@
 import pandas as pd
-
 import vizro.models as vm
 import vizro.plotly.express as px
 from vizro import Vizro
 from vizro._constants import FILTER_ACTION_PREFIX
 from vizro.actions import _filter
 from vizro.models import Action
-from vizro.models.types import MultiValueType, capture
+from vizro.models.types import capture
+from vizro.models.types import MultiValueType
 
 
 def _filter_isin(series: pd.Series, value: MultiValueType) -> pd.Series:
+    """
+
+    :param series: pd.Series:
+    :param value: MultiValueType:
+
+    """
     return series.isin(value)
 
 
 @capture("action")
 def my_custom_action(dropdown_value):
-    """Custom action."""
+    """Custom action.
+
+    :param dropdown_value:
+
+    """
     print(dropdown_value)
     text = f"The dropdown species is: {dropdown_value}"
     return text
@@ -28,11 +38,20 @@ page = vm.Page(
     components=[
         vm.Graph(
             id="scatter_chart",
-            figure=px.scatter(df, x="sepal_length", y="petal_width", color="species", custom_data=["species"]),
+            figure=px.scatter(
+                df,
+                x="sepal_length",
+                y="petal_width",
+                color="species",
+                custom_data=["species"],
+            ),
         ),
         vm.Graph(
             id="scatter_chart_2",
-            figure=px.scatter(df, x="sepal_length", y="petal_width", color="species"),
+            figure=px.scatter(df,
+                              x="sepal_length",
+                              y="petal_width",
+                              color="species"),
         ),
         vm.Card(id="my_card", text="Click on a point on the above graph."),
     ],
