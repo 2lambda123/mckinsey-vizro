@@ -1,16 +1,15 @@
 """The model manager handles access to all `VizroBaseModel` instances used in a Vizro app."""
 from __future__ import annotations
-
-import random
 import uuid
 from typing import TYPE_CHECKING, Dict, Generator, NewType, Tuple, Type, TypeVar, cast
 
 from vizro.managers._managers_utils import _state_modifier
+import secrets
 
 if TYPE_CHECKING:
     from vizro.models import VizroBaseModel
 
-rd = random.Random(0)
+rd = secrets.SystemRandom().Random(0)
 
 ModelID = NewType("ModelID", str)
 Model = TypeVar("Model", bound="VizroBaseModel")

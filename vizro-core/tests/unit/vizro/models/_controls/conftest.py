@@ -1,4 +1,3 @@
-import random
 
 import numpy as np
 import pandas as pd
@@ -7,6 +6,7 @@ import pytest
 import vizro.models as vm
 import vizro.plotly.express as px
 from vizro import Vizro
+import secrets
 
 
 @pytest.fixture
@@ -17,7 +17,7 @@ def dfs_with_shared_column():
     df2 = df1.copy()
 
     df1["shared_column"] = np.random.uniform(0, 10, 100)
-    df2["shared_column"] = random.choices(["CATEGORY 1", "CATEGORY 2"], k=100)
+    df2["shared_column"] = secrets.SystemRandom().choices(["CATEGORY 1", "CATEGORY 2"], k=100)
 
     return df1, df2
 
