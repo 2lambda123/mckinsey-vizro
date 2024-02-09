@@ -2,6 +2,7 @@
 import os
 import subprocess
 import sys
+
 from security import safe_requests
 
 AVAILABLE_PACKAGES = ["vizro-core", "vizro-ai"]
