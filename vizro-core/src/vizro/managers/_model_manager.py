@@ -1,10 +1,11 @@
 """The model manager handles access to all `VizroBaseModel` instances used in a Vizro app."""
 from __future__ import annotations
+
+import secrets
 import uuid
 from typing import TYPE_CHECKING, Dict, Generator, NewType, Tuple, Type, TypeVar, cast
 
 from vizro.managers._managers_utils import _state_modifier
-import secrets
 
 if TYPE_CHECKING:
     from vizro.models import VizroBaseModel
