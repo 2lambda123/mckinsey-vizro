@@ -2,8 +2,7 @@
 import os
 import subprocess
 import sys
-
-import requests
+from security import safe_requests
 
 AVAILABLE_PACKAGES = ["vizro-core", "vizro-ai"]
 VERSION_MATCHSTR = r'\s*__version__\s*=\s*"(\d+\.\d+\.\d+)"'
@@ -15,7 +14,7 @@ def _check_no_version_pypi(package_name, package_version):
         pypi_endpoint = f"https://pypi.org/pypi/vizro/{package_version}/json/"
     else:
         pypi_endpoint = f"https://pypi.org/pypi/{package_name}/{package_version}/json/"
-    response = requests.get(pypi_endpoint, timeout=10)
+    response = safe_requests.get(pypi_endpoint, timeout=10)
     if response.status_code == RESPONSE_ERROR:
         # Version doesn't exist on Pypi - do release
         print(f"Potential release of {package_name} {package_version}")  # noqa: T201
