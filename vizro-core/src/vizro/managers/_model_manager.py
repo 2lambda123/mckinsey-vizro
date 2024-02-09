@@ -22,14 +22,14 @@ class DuplicateIDError(ValueError):
 class ModelManager:
     def __init__(self):
         """"""
-        
+
         self.__models: Dict[ModelID, VizroBaseModel] = {}
         self._frozen_state = False
 
     @_state_modifier
     def __setitem__(self, model_id: ModelID, model: Model):
         """"""
-        
+
         if model_id in self.__models:
             raise DuplicateIDError(
                 f"Model with id={model_id} already exists. Models must have a unique id across the whole dashboard. "
@@ -40,7 +40,7 @@ class ModelManager:
 
     def __getitem__(self, model_id: ModelID) -> VizroBaseModel:
         """"""
-        
+
         # Do we need to return deepcopy(self.__models[model_id]) to avoid adjusting element by accident?
         return self.__models[model_id]
 
@@ -60,12 +60,12 @@ class ModelManager:
     @staticmethod
     def _generate_id() -> ModelID:
         """"""
-        
+
         return ModelID(str(uuid.UUID(int=rd.getrandbits(128))))
 
     def _clear(self):
         """"""
-        
+
         self.__init__()  # type: ignore[misc]
 
 
