@@ -11,6 +11,18 @@ RESPONSE_ERROR = 404
 
 
 def _check_no_version_pypi(package_name, package_version):
+    """Checks if a given package version exists on PyPI and returns a boolean value indicating whether the package should be released or not.
+    Parameters:
+        - package_name (str): The name of the package to be checked.
+        - package_version (str): The version of the package to be checked.
+    Returns:
+        - bool: True if the package should be released, False if it already exists on PyPI.
+    Processing Logic:
+        - Generates the PyPI endpoint based on the package name and version.
+        - Sends a request to the endpoint and checks the response status code.
+        - If the status code indicates an error, the package should be released.
+        - If the status code is successful, the package already exists on PyPI and should not be released."""
+    
     if package_name == "vizro-core":
         pypi_endpoint = f"https://pypi.org/pypi/vizro/{package_version}/json/"
     else:
@@ -26,6 +38,8 @@ def _check_no_version_pypi(package_name, package_version):
 
 
 def _check_no_dev_version(package_name, package_version):
+    """"""
+    
     if "dev" not in package_version:
         return True
     else:
