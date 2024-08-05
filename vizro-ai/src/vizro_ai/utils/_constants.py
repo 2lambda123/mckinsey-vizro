@@ -1,4 +1,5 @@
 """File to store all constants."""
+
 WHITELISTED_PACKAGES = [
     "pandas",
     "numpy",

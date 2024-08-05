@@ -1,4 +1,5 @@
 """Unit tests for vizro.models.RadioItems."""
+
 import json
 
 import plotly
