@@ -1,4 +1,5 @@
 """Unit tests for vizro.models.Dropdown."""
+
 import json
 
 import plotly

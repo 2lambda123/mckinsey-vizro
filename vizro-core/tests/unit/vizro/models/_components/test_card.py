@@ -1,4 +1,5 @@
 """Unit tests for vizro.models.Card."""
+
 import json
 
 import dash_bootstrap_components as dbc
