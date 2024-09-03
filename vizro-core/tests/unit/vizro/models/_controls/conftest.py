@@ -11,6 +11,8 @@ from vizro import Vizro
 
 @pytest.fixture
 def dfs_with_shared_column():
+    """"""
+
     df1 = pd.DataFrame()
     df1["x"] = np.random.uniform(0, 10, 100)
     df1["y"] = np.random.uniform(0, 10, 100)
