@@ -7,11 +7,11 @@ from .explanation import GetCodeExplanation
 from .visual_code import GetVisualCode
 
 __all__ = [
-    "VizroAiComponentBase",
     "GetChartSelection",
-    "GetDataFrameCraft",
-    "GetVisualCode",
-    "GetCustomChart",
     "GetCodeExplanation",
+    "GetCustomChart",
+    "GetDataFrameCraft",
     "GetDebugger",
+    "GetVisualCode",
+    "VizroAiComponentBase",
 ]
