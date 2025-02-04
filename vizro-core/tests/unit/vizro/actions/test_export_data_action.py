@@ -131,7 +131,7 @@ def ctx_export_data(request):
 
 class TestExportData:
     @pytest.mark.usefixtures("managers_one_page_without_graphs_one_button")
-    @pytest.mark.parametrize("ctx_export_data", [([[], None, None, None])], indirect=True)
+    @pytest.mark.parametrize("ctx_export_data", [[[], None, None, None]], indirect=True)
     def test_no_graphs_no_targets(self, ctx_export_data):
         # Add action to relevant component
         model_manager["button"].actions = [vm.Action(id="test_action", function=export_data())]
@@ -143,7 +143,7 @@ class TestExportData:
         assert result == expected
 
     @pytest.mark.usefixtures("managers_one_page_two_graphs_one_button")
-    @pytest.mark.parametrize("ctx_export_data", [([["scatter_chart", "box_chart"], None, None, None])], indirect=True)
+    @pytest.mark.parametrize("ctx_export_data", [[["scatter_chart", "box_chart"], None, None, None]], indirect=True)
     def test_graphs_no_targets(self, ctx_export_data, gapminder_2007):
         # Add action to relevant component
         model_manager["button"].actions = [vm.Action(id="test_action", function=export_data())]
